@@ -2,7 +2,7 @@ require "test_helper"
 
 class UserTest < ActiveSupport::TestCase
   test "requires a name" do
-    @user = User.new(name: "", email: "johndoe@example.com", password: "password")
+    @user = User.new(name: "", email: "johndoe@example.com", password: "password", password_confirmation: "password")
     assert_not @user.valid?
 
     @user.name = "John"
@@ -10,7 +10,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "requires a valid email" do
-    @user = User.new(name: "John", email: "", password: "password")
+    @user = User.new(name: "John", email: "", password: "password", password_confirmation: "password")
     assert_not @user.valid?
 
     @user.email = "invalid"
@@ -22,11 +22,11 @@ class UserTest < ActiveSupport::TestCase
 
   test "requires a unique email" do
     @existing_user = User.create(
-      name: "John", email: "jd@example.com", password: "password"
+      name: "John", email: "jd@example.com", password: "password", password_confirmation: "password"
     )
     assert @existing_user.persisted?
 
-    @user = User.new(name: "Jon", email: "jd@example.com", password: "password")
+    @user = User.new(name: "Jon", email: "jd@example.com", password: "password", password_confirmation: "password")
     assert_not @user.valid?
   end
 
@@ -34,7 +34,8 @@ class UserTest < ActiveSupport::TestCase
     @user = User.create(
       name: " John ",
       email: " johndoe@example.com ",
-      password: "password"
+      password: "password",
+      password_confirmation: "password"
     )
 
     assert_equal "John", @user.name
@@ -45,11 +46,13 @@ class UserTest < ActiveSupport::TestCase
     @user = User.new(
       name: "Jane",
       email: "janedoe@example.com",
-      password: ""
+      password: "",
+      password_confirmation: ""
     )
     assert_not @user.valid?
 
     @user.password = "password"
+    @user.password_confirmation = "password"
     assert @user.valid?
 
     max_length = ActiveModel::SecurePassword::MAX_PASSWORD_LENGTH_ALLOWED

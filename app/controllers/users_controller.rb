@@ -10,8 +10,8 @@ class UsersController < ApplicationController
       @organization = Organization.create(members: [@user])
       # TODO: log in user
       redirect_to root_path,
-        status: :see_other,
-        flash: { success: t(".welcome", name: @user.name)}
+                  status: :see_other,
+                  flash:  { success: t(".welcome", name: @user.name) }
     else
       render :new, status: :unprocessable_entity
     end
@@ -20,6 +20,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :email, :password)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
 end
