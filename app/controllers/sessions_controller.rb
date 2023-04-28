@@ -1,4 +1,6 @@
 class SessionsController < ApplicationController
+  skip_authentication only: [:new, :create]
+
   def new; end
 
   def create # rubocop:disable Metrics/MethodLength
@@ -8,9 +10,10 @@ class SessionsController < ApplicationController
     )
 
     if @app_session
-      #  TODO: store details in a cookie
+      log_in(@app_session)
+
       flash[:success] = t(".success")
-      redirect_to root_path status: :see_other
+      redirect_to root_path, status: :see_other
     else
       flash.now[:danger] = t(".incorrect_details")
       render :new, status: :unprocessable_entity

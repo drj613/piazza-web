@@ -6,4 +6,12 @@ class AppSession < ApplicationRecord
   before_create do
     self.token = self.class.generate_unique_secure_token
   end
+
+  def to_h
+    {
+      user_id:     user.id,
+      app_session: id,
+      token:
+    }
+  end
 end

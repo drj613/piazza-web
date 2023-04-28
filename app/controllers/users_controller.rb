@@ -1,14 +1,18 @@
 class UsersController < ApplicationController
+  skip_authentication only: [:new, :create]
+
   def new
     @user = User.new
   end
 
-  def create
+  def create # rubocop:disable Metrics/MethodLength
     @user = User.new(user_params)
 
     if @user.save
       @organization = Organization.create(members: [@user])
-      # TODO: log in user
+      @app_session = @user.app_sessions.create
+      log_in(@app_session)
+
       redirect_to root_path,
                   status: :see_other,
                   flash:  { success: t(".welcome", name: @user.name) }
