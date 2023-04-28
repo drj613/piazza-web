@@ -1,5 +1,7 @@
-ActionView::Base.field_error_proc = -> (html_tag, instance) {
-  unless html_tag =~ /^<label/
+ActionView::Base.field_error_proc = lambda { |html_tag, instance|
+  if html_tag =~ /^<label/
+    html_tag
+  else
     html = Nokogiri::HTML::DocumentFragment.parse(html_tag)
     html.children.add_class("is-danger")
 
@@ -9,8 +11,6 @@ ActionView::Base.field_error_proc = -> (html_tag, instance) {
       </p>
     HTML
 
-    "#{html.to_s}#{error_message_markup}".html_safe
-  else
-    html_tag
+    "#{html}#{error_message_markup}".html_safe
   end
 }

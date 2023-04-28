@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class ApplicationHelperTest < ActionView::TestCase
   test "formats page-specific title" do
@@ -7,6 +7,6 @@ class ApplicationHelperTest < ActionView::TestCase
   end
 
   test "returns app name when page title is missing" do
-    assert_equal I18n.t('piazza'), title
+    assert_equal I18n.t("piazza"), title
   end
 end

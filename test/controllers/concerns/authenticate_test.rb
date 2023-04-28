@@ -1,9 +1,9 @@
-require 'test_helper'
+require "test_helper"
 
 class AuthenticateTestsController < TestController
   include Authenticate
 
-  skip_authentication only: [:new, :create]
+  skip_authentication only: %i[new create]
   allow_unauthenticated only: :show
 
   def show
@@ -11,13 +11,12 @@ class AuthenticateTestsController < TestController
   end
 end
 
-
 class AuthenticateTest < ActionDispatch::IntegrationTest
   setup do
     @user = users(:jerry)
     draw_test_routes do
       resource :authenticate_test,
-        only: [:new, :create, :show, :edit]
+               only: %i[new create show edit]
     end
   end
 
@@ -32,7 +31,7 @@ class AuthenticateTest < ActionDispatch::IntegrationTest
     get edit_authenticate_test_path
 
     assert_response :ok
-    assert_match /authenticate_tests#edit/, response.body
+    assert_match(/authenticate_tests#edit/, response.body)
   end
 
   test "unauthenticated request renders login page" do
@@ -46,11 +45,11 @@ class AuthenticateTest < ActionDispatch::IntegrationTest
   test "authentication is skipped for actions marked to do so" do
     get new_authenticate_test_path
     assert_response :ok
-    assert_match /authenticate_tests#new/, response.body
+    assert_match(/authenticate_tests#new/, response.body)
 
     post authenticate_test_path
     assert_response :ok
-    assert_match /authenticate_tests#create/, response.body
+    assert_match(/authenticate_tests#create/, response.body)
   end
 
   test "unauthenticated requests are allowed when marked" do

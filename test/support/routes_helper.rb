@@ -1,13 +1,13 @@
 # Ensure you call `reload_routes!` in your test's `teardown`
-  # to erase all the routes drawn by your test case.
+# to erase all the routes drawn by your test case.
 module RoutesHelper
-  def draw_test_routes(&block)
+  def draw_test_routes(&)
     # Don't clear routes when calling Rails.application.routes.draw
     Rails.application.routes.disable_clear_and_finalize = true
 
     Rails.application.routes.draw do
       scope "test" do
-        instance_exec(&block)
+        instance_exec(&)
       end
     end
   end

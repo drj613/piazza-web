@@ -5,12 +5,12 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     get sign_up_path
     assert_response :ok
 
-    assert_difference [ "User.count", "Organization.count" ], 1 do
+    assert_difference ["User.count", "Organization.count"], 1 do
       post sign_up_path, params: {
         user: {
-          name: "John",
-          email: "johndoe@example.com",
-          password: "password12",
+          name:                  "John",
+          email:                 "johndoe@example.com",
+          password:              "password12",
           password_confirmation: "password12"
         }
       }
@@ -21,18 +21,18 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
     follow_redirect!
     assert_select ".notification.is-success",
-      text: I18n.t("users.create.welcome", name: "John")
+                  text: I18n.t("users.create.welcome", name: "John")
   end
 
   test "renders errors if input data is invalid" do
     get sign_up_path
     assert_response :ok
 
-    assert_no_difference [ "User.count", "Organization.count" ] do
+    assert_no_difference ["User.count", "Organization.count"] do
       post sign_up_path, params: {
         user: {
-          name: "John",
-          email: "johndoe@example.com",
+          name:     "John",
+          email:    "johndoe@example.com",
           password: "pass"
         }
       }
@@ -40,25 +40,25 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_entity
     assert_select "p.is-danger",
-      text: I18n.t("activerecord.errors.models.user.attributes.password.too_short")
+                  text: I18n.t("activerecord.errors.models.user.attributes.password.too_short")
   end
 
   test "renders error if password and confirmation don't match" do
     get sign_up_path
     assert_response :ok
 
-    assert_no_difference [ "User.count", "Organization.count" ] do
+    assert_no_difference ["User.count", "Organization.count"] do
       post sign_up_path, params: {
         user: {
-          name: "John",
-          email: "johndoe@example.com",
-          password: "password",
+          name:                  "John",
+          email:                 "johndoe@example.com",
+          password:              "password",
           password_confirmation: "drowssap"
         }
       }
     end
 
     assert_select "p.is-danger",
-      text: I18n.t("activerecord.errors.models.user.attributes.password_confirmation.confirmation") || "doesn't match Password"
+                  text: I18n.t("activerecord.errors.models.user.attributes.password_confirmation.confirmation") || "doesn't match Password"
   end
 end

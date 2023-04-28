@@ -2,7 +2,8 @@ require "test_helper"
 
 class UserTest < ActiveSupport::TestCase
   test "requires a name" do
-    @user = User.new(name: "", email: "johndoe@example.com", password: "password", password_confirmation: "password")
+    @user = User.new(name: "", email: "johndoe@example.com", password: "password",
+                     password_confirmation: "password")
     assert_not @user.valid?
 
     @user.name = "John"
@@ -10,7 +11,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "requires a valid email" do
-    @user = User.new(name: "John", email: "", password: "password", password_confirmation: "password")
+    @user = User.new(name: "John", email: "", password: "password",
+                     password_confirmation: "password")
     assert_not @user.valid?
 
     @user.email = "invalid"
@@ -26,15 +28,16 @@ class UserTest < ActiveSupport::TestCase
     )
     assert @existing_user.persisted?
 
-    @user = User.new(name: "Jon", email: "jd@example.com", password: "password", password_confirmation: "password")
+    @user = User.new(name: "Jon", email: "jd@example.com", password: "password",
+                     password_confirmation: "password")
     assert_not @user.valid?
   end
 
   test "name and email are stripped of spaces before saving" do
     @user = User.create(
-      name: " John ",
-      email: " johndoe@example.com ",
-      password: "password",
+      name:                  " John ",
+      email:                 " johndoe@example.com ",
+      password:              "password",
       password_confirmation: "password"
     )
 
@@ -44,9 +47,9 @@ class UserTest < ActiveSupport::TestCase
 
   test "password length must meet length requirements" do
     @user = User.new(
-      name: "Jane",
-      email: "janedoe@example.com",
-      password: "",
+      name:                  "Jane",
+      email:                 "janedoe@example.com",
+      password:              "",
       password_confirmation: ""
     )
     assert_not @user.valid?
@@ -62,7 +65,7 @@ class UserTest < ActiveSupport::TestCase
 
   test "can create a session with email and correct password" do
     @app_session = User.create_app_session(
-      email: "jerry@example.com",
+      email:    "jerry@example.com",
       password: "password"
     )
 
@@ -72,7 +75,7 @@ class UserTest < ActiveSupport::TestCase
 
   test "cannot create a session with incorrect password" do
     @app_session = User.create_app_session(
-      email: "jerry@example.com",
+      email:    "jerry@example.com",
       password: "WRONG_PASSWORD"
     )
 
@@ -81,7 +84,7 @@ class UserTest < ActiveSupport::TestCase
 
   test "creating a sessions with non-existent email returns nil" do
     @app_session = User.create_app_session(
-      email: "who-am-i@example.com",
+      email:    "who-am-i@example.com",
       password: "this-can-be-whatever"
     )
 
@@ -93,7 +96,7 @@ class UserTest < ActiveSupport::TestCase
     @app_session = @user.app_sessions.create
 
     assert_equal @app_session,
-      @user.authenticate_app_session(@app_session.id, @app_session.token)
+                 @user.authenticate_app_session(@app_session.id, @app_session.token)
   end
 
   test "trying to authenticate with a token that doesn't exist returns false" do
