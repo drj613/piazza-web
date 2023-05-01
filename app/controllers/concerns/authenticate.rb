@@ -29,10 +29,16 @@ module Authenticate
     Current.user.present?
   end
 
-  def log_in(app_session)
-    cookies.encrypted.permanent[:app_session] = {
-      value: app_session.to_h
-    }
+  def log_in(app_session, remember_me)
+    if remember_me
+      cookies.encrypted.permanent[:app_session] = {
+        value: app_session.to_h
+      }
+    else
+      session[:app_session] = {
+        value: app_session.to_h
+      }
+    end
   end
 
   def log_out

@@ -3,14 +3,14 @@ class SessionsController < ApplicationController
 
   def new; end
 
-  def create # rubocop:disable Metrics/MethodLength
+  def create
     @app_session = User.create_app_session(
       email:    login_params[:email],
       password: login_params[:password]
     )
 
     if @app_session
-      log_in(@app_session)
+      log_in(@app_session, login_params[:remember_me])
 
       flash[:success] = t(".success")
       redirect_to root_path, status: :see_other
@@ -31,6 +31,6 @@ class SessionsController < ApplicationController
 
   def login_params
     @login_params ||=
-      params.require(:user).permit(:email, :password)
+      params.require(:user).permit(:email, :password, :remember_me)
   end
 end
